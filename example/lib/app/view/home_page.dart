@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:theme_genius/theme_genius.dart';
 
-const list = <String>['System', 'Light', 'Dark'];
+const list = ['System', 'Light', 'Dark'];
+const iconList = [Icons.auto_mode, Icons.light_mode, Icons.dark_mode];
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? dropdownValue;
+  String? themeModeText;
 
   @override
   void initState() {
@@ -30,90 +32,75 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       dropdownValue = value;
+      themeModeText = themeMode.toString();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ThemeGenius'),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 32,
-          ),
-          child: DropdownButton<String>(
-            isExpanded: true,
-            value: dropdownValue,
-            onChanged: (String? value) async {
-              final themeMode = switch (value) {
-                'Light' => ThemeMode.light,
-                'Dark' => ThemeMode.dark,
-                _ => ThemeMode.system,
-              };
-
-              await ThemeGenius.setThemeMode(themeMode);
-
-              setState(() {
-                dropdownValue = value;
-              });
-            },
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 32,
+        ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 100,
             ),
-            items: [
-              DropdownMenuItem(
-                value: list[0],
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.auto_mode,
+            Text(
+              'Current Theme Mode: $themeModeText',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  value: dropdownValue,
+                  onChanged: (String? value) async {
+                    final themeMode = switch (value) {
+                      'Light' => ThemeMode.light,
+                      'Dark' => ThemeMode.dark,
+                      _ => ThemeMode.system,
+                    };
+
+                    await ThemeGenius.setThemeMode(themeMode);
+
+                    setState(() {
+                      dropdownValue = value;
+                      themeModeText = themeMode.toString();
+                    });
+                  },
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                  ),
+                  items: List.generate(
+                    list.length,
+                    (index) => DropdownMenuItem(
+                      value: list[index],
+                      child: Row(
+                        children: [
+                          Icon(
+                            iconList[index],
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            list[index],
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      list[0],
-                    ),
-                  ],
+                  ),
                 ),
               ),
-              DropdownMenuItem(
-                value: list[1],
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.light_mode,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      list[1],
-                    ),
-                  ],
-                ),
-              ),
-              DropdownMenuItem(
-                value: list[2],
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.dark_mode,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      list[2],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

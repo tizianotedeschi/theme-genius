@@ -49,21 +49,6 @@ class ThemeGenius extends InheritedWidget {
     return result != null ? _parseThemeMode(result) : null;
   }
 
-  /// Returns `true` if the current brightness is light, `false` otherwise.
-  static bool isBrightnessLight(BuildContext context) {
-    final theme = ThemeGenius.of(context)?.themeMode ?? ThemeMode.system;
-
-    if (theme == ThemeMode.system) {
-      if (MediaQuery.of(context).platformBrightness == Brightness.light) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-
-    return theme == ThemeMode.light;
-  }
-
   static ThemeMode? _parseThemeMode(String value) {
     return switch (value) {
       'ThemeMode.system' => ThemeMode.system,
