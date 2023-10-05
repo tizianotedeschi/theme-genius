@@ -107,8 +107,10 @@ Widget build(BuildContext context) {
     builder: (themeMode) {
       return MaterialApp(...);
     },
-    placeholder: const Center(
-      child: CircularProgressIndicator(),
+    placeholder: const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     ),
   );
 }
