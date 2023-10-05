@@ -40,14 +40,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 32,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           children: [
-            const SizedBox(
-              height: 100,
-            ),
+            const SizedBox(height: 100),
             Text(
               'Current Theme Mode: $themeModeText',
               textAlign: TextAlign.center,
@@ -75,24 +71,16 @@ class _HomePageState extends State<HomePage> {
                       themeModeText = themeMode.toString();
                     });
                   },
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   items: List.generate(
                     list.length,
                     (index) => DropdownMenuItem(
                       value: list[index],
                       child: Row(
                         children: [
-                          Icon(
-                            iconList[index],
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            list[index],
-                          ),
+                          Icon(iconList[index]),
+                          const SizedBox(width: 8),
+                          Text(list[index]),
                         ],
                       ),
                     ),

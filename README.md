@@ -1,19 +1,117 @@
-# Theme Genius
+# ThemeGenius
 
+<!-- ![coverage][coverage_badge] -->
+
+[![version][version-badge]][package]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)](https://github.com/felangel/mason)
 [![License: MIT][license_badge]][license_link]
 
-Thememode manager
+A Flutter package that provides a simple way to manage theme modes in your app.
 
 ## Installation 💻
 
-**❗ In order to start using Theme Genius you must have the [Flutter SDK][flutter_install_link] installed on your machine.**
+**❗ In order to start using ThemeGenius you must have the [Flutter SDK][flutter_install_link] installed on your machine.**
 
-Install via `flutter pub add`:
+- Install via `flutter pub add`:
 
 ```sh
 dart pub add theme_genius
+```
+
+- Or add this to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  theme_genius: ^1.0.0
+```
+
+---
+
+## Usage 📖
+
+- Import the `ThemeGeniusWrapper` widget, wrap `MaterialApp` with it:
+
+```dart
+import 'package:theme_genius/theme_genius.dart';
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ThemeGeniusWrapper(
+      builder: (themeMode) {
+        return MaterialApp(
+          themeMode: themeMode,
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          home: const MyHomePage(
+            title: 'Flutter Demo Home Page',
+          ),
+        );
+      },
+    );
+  }
+}
+```
+
+- Get the current `themeMode` with:
+
+```dart
+final themeMode = await ThemeGenius.getThemeMode(context);
+
+```
+
+- Change and save the `themeMode` with:
+
+```dart
+final themeMode = ThemeMode.dark;
+await ThemeGenius.setThemeMode(themeMode);
+
+```
+
+- Load the saved `themeMode` with:
+
+```dart
+final themeMode = await ThemeGenius.loadThemeMode();
+
+```
+
+Check the `example` folder for a complete example.
+
+---
+
+## Extra 📖
+
+- Set the `defaultThemeMode` in `ThemeGeniusWrapper` with:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return ThemeGeniusWrapper(
+    builder: (themeMode) {
+      return MaterialApp(...);
+    },
+    defaultThemeMode: ThemeMode.dark,
+  );
+}
+```
+
+- Set a custom `placeholder` (a widget to display while the theme mode is being loaded) in `ThemeGeniusWrapper` with:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return ThemeGeniusWrapper(
+    builder: (themeMode) {
+      return MaterialApp(...);
+    },
+    placeholder: const Center(
+      child: CircularProgressIndicator(),
+    ),
+  );
+}
 ```
 
 ---
@@ -24,32 +122,13 @@ Theme Genius comes with a built-in [GitHub Actions workflow][github_actions_link
 
 Out of the box, on each pull request and push, the CI `formats`, `lints`, and `tests` the code. This ensures the code remains consistent and behaves correctly as you add functionality or make changes. The project uses [Very Good Analysis][very_good_analysis_link] for a strict set of analysis options used by our team. Code coverage is enforced using the [Very Good Workflows][very_good_coverage_link].
 
----
+## License 📄
 
-## Running Tests 🧪
+MIT © 2012-2023 Scott Chacon and others
 
-For first time users, install the [very_good_cli][very_good_cli_link]:
-
-```sh
-dart pub global activate very_good_cli
-```
-
-To run all unit tests:
-
-```sh
-very_good test --coverage
-```
-
-To view the generated coverage report you can use [lcov](https://github.com/linux-test-project/lcov).
-
-```sh
-# Generate Coverage Report
-genhtml coverage/lcov.info -o coverage/
-
-# Open Coverage Report
-open coverage/index.html
-```
-
+[version-badge]: https://img.shields.io/pub/v/theme_genius
+[package]: https://pub.dev/packages/theme_genius
+[coverage_badge]: coverage_badge.svg
 [flutter_install_link]: https://docs.flutter.dev/get-started/install
 [github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg

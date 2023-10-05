@@ -1,6 +1,6 @@
 name: theme_genius
-description: ThemeMode manager
-version: 0.1.0+1
+description: ThemeMode Manager
+version: 1.0.0+1
 publish_to: none
 
 environment:
