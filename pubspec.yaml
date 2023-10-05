@@ -1,7 +1,7 @@
 name: theme_genius
 description: A Flutter package that provides a simple way to manage theme modes in your app.
 repository: https://github.com/tizianotedeschi/theme_genius
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
