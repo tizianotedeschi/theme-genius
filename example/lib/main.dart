@@ -98,7 +98,10 @@ class _HomePageState extends State<HomePage> {
                       _ => ThemeMode.system,
                     };
 
-                    await ThemeGenius.setThemeMode(themeMode);
+                    await ThemeGenius.setThemeMode(
+                      context,
+                      themeMode: themeMode,
+                    );
 
                     setState(() {
                       dropdownValue = value;

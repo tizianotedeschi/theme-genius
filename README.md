@@ -22,7 +22,7 @@ dart pub add theme_genius
 
 ```yaml
 dependencies:
-  theme_genius: ^1.0.1
+  theme_genius: ^1.1.0
 ```
 
 ---
@@ -66,7 +66,7 @@ final themeMode = await ThemeGenius.getThemeMode(context);
 
 ```dart
 final themeMode = ThemeMode.dark;
-await ThemeGenius.setThemeMode(themeMode);
+await ThemeGenius.setThemeMode(context, themeMode: themeMode);
 
 ```
 

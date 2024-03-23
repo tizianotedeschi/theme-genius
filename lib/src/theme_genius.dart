@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:theme_genius/src/theme_genius_mode.dart';
+import 'package:theme_genius/theme_genius.dart';
+
 /// An inherited widget that provides the theme mode for the app.
 class ThemeGenius extends InheritedWidget {
   /// Creates a [ThemeGenius] widget.
   ///
-  /// The [themeMode] parameter specifies the initial theme mode for the app.
+  /// The [themeGeniusMode] parameter specifies the [ThemeGeniusMode] instance
   const ThemeGenius({
     required super.child,
-    this.themeMode = ThemeMode.system,
+    required this.themeGeniusMode,
     super.key,
   });
 
   /// The initial theme mode for the app.
-  final ThemeMode themeMode;
+  final ThemeGeniusMode themeGeniusMode;
+
+  /// Returns the current theme mode.
+  ThemeMode get themeMode => themeGeniusMode.themeMode;
 
   /// Returns the [ThemeGenius] instance from the given [BuildContext].
   static ThemeGenius? of(BuildContext context) {
@@ -35,7 +41,12 @@ class ThemeGenius extends InheritedWidget {
 
   /// Sets the theme mode and returns a [Future] that completes with a [bool]
   /// indicating whether the operation was successful.
-  static Future<bool> setThemeMode(ThemeMode themeMode) async {
+  static Future<bool> setThemeMode(
+    BuildContext context, {
+    required ThemeMode themeMode,
+  }) async {
+    ThemeGenius.of(context)?.themeGeniusMode.setThemeMode(themeMode);
+
     final prefs = await SharedPreferences.getInstance();
     return prefs.setString('THEME_MODE_GENIUS', themeMode.toString());
   }

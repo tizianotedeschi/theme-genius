@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:theme_genius/src/theme_genius.dart';
 import 'package:theme_genius/theme_genius.dart';
 
 class MockSharedPreferences extends Mock implements SharedPreferences {}
@@ -12,13 +13,22 @@ Widget defaultTestBuilder(ThemeMode themeMode) {
     theme: ThemeData.light(),
     darkTheme: ThemeData.dark(),
     home: Scaffold(
-      body: ElevatedButton(
-        onPressed: () {
-          final theme =
-              themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.light;
-          ThemeGenius.setThemeMode(theme);
+      body: StatefulBuilder(
+        builder: (context, setState) {
+          return ElevatedButton(
+            onPressed: () {
+              final theme = themeMode == ThemeMode.dark
+                  ? ThemeMode.light
+                  : ThemeMode.light;
+
+              ThemeGenius.setThemeMode(
+                context,
+                themeMode: theme,
+              );
+            },
+            child: const Text('Change theme'),
+          );
         },
-        child: const Text('Change theme'),
       ),
     ),
   );

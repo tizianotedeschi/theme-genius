@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theme_genius/src/theme_genius.dart';
+import 'package:theme_genius/src/theme_genius_mode.dart';
 
 /// A wrapper widget that provides the theme mode for the app.
 class ThemeGeniusWrapper extends StatefulWidget {
@@ -34,24 +35,32 @@ class ThemeGeniusWrapper extends StatefulWidget {
 }
 
 class _ThemeGeniusWrapperState extends State<ThemeGeniusWrapper> {
+  final ThemeGeniusMode _themeGeniusMode = ThemeGeniusMode();
   late ThemeMode _themeMode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _themeGeniusMode.addListener(() {
+      setState(() => _themeMode = _themeGeniusMode.themeMode);
+    });
+  }
 
   Future<ThemeMode> _init() async {
     final oldThemeMode = await ThemeGenius.loadThemeMode();
 
     if (oldThemeMode != null) {
-      _update(oldThemeMode);
+      _themeGeniusMode.themeMode = oldThemeMode;
+      _themeMode = oldThemeMode;
+
       return oldThemeMode;
     }
 
-    await ThemeGenius.setThemeMode(widget.defaultThemeMode);
+    _themeGeniusMode.themeMode = widget.defaultThemeMode;
+    _themeMode = widget.defaultThemeMode;
 
-    _update(widget.defaultThemeMode);
     return widget.defaultThemeMode;
-  }
-
-  void _update(ThemeMode themeMode) {
-    setState(() => _themeMode = themeMode);
   }
 
   @override
@@ -60,7 +69,7 @@ class _ThemeGeniusWrapperState extends State<ThemeGeniusWrapper> {
       future: _init(),
       builder: (context, snapshot) => snapshot.hasData
           ? ThemeGenius(
-              themeMode: _themeMode,
+              themeGeniusMode: _themeGeniusMode,
               child: widget.builder(_themeMode),
             )
           : widget.placeholder ?? Container(),
