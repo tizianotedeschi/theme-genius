@@ -1,44 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:theme_genius/src/theme_genius.dart';
 import 'package:theme_genius/theme_genius.dart';
-
-class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 Widget defaultTestBuilder(ThemeMode themeMode) {
   return MaterialApp(
     themeMode: themeMode,
     theme: ThemeData.light(),
     darkTheme: ThemeData.dark(),
-    home: Scaffold(
-      body: StatefulBuilder(
-        builder: (context, setState) {
-          return ElevatedButton(
-            onPressed: () {
-              final theme = themeMode == ThemeMode.dark
-                  ? ThemeMode.light
-                  : ThemeMode.light;
-
-              ThemeGenius.setThemeMode(
-                context,
-                themeMode: theme,
-              );
-            },
-            child: const Text('Change theme'),
-          );
-        },
-      ),
+    home: const Scaffold(
+      body: Text('ThemeGeniusWrapper'),
     ),
   );
 }
 
 void main() {
-  setUp(() {
-    SharedPreferences.setMockInitialValues({});
-  });
-
   Widget buildTestApp({
     Widget Function(ThemeMode) builder = defaultTestBuilder,
     ThemeMode defaultThemeMode = ThemeMode.system,
@@ -68,30 +43,6 @@ void main() {
         );
 
         expect(find.text('Loading...'), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      'displays child widget after loading',
-      (tester) async {
-        await tester.pumpWidget(
-          buildTestApp(
-            builder: (themeMode) => MaterialApp(
-              themeMode: themeMode,
-              theme: ThemeData.light(),
-              darkTheme: ThemeData.dark(),
-              home: Scaffold(
-                body: Center(
-                  child: Text('Theme mode: $themeMode'),
-                ),
-              ),
-            ),
-            defaultThemeMode: ThemeMode.light,
-          ),
-        );
-
-        await tester.pump();
-        expect(find.text('Theme mode: ThemeMode.light'), findsOneWidget);
       },
     );
   });

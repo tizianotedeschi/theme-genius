@@ -35,28 +35,35 @@ class ThemeGenius extends InheritedWidget {
   static Future<ThemeMode> getThemeMode(BuildContext context) async {
     return Future.delayed(
       Duration.zero,
-      () => ThemeGenius.of(context)?.themeMode ?? ThemeMode.system,
+      () {
+        if (!context.mounted) return ThemeMode.system;
+        return ThemeGenius.of(context)?.themeMode ?? ThemeMode.system;
+      },
     );
   }
 
-  /// Sets the theme mode and returns a [Future] that completes with a [bool]
-  /// indicating whether the operation was successful.
-  static Future<bool> setThemeMode(
+  /// Sets the new theme mode to the shared preferences and updates the theme
+  /// mode for the app.
+  static Future<void> setThemeMode(
     BuildContext context, {
     required ThemeMode themeMode,
   }) async {
-    ThemeGenius.of(context)?.themeGeniusMode.setThemeMode(themeMode);
+    final currentThemeMode = ThemeGenius.of(context)?.themeMode;
+    if (currentThemeMode == themeMode) return;
 
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.setString('THEME_MODE_GENIUS', themeMode.toString());
+    ThemeGenius.of(context)?.themeGeniusMode.setThemeMode(themeMode);
+    return SharedPreferencesAsync().setString(
+      'THEME_MODE_GENIUS',
+      themeMode.toString(),
+    );
   }
 
-  /// Loads the theme mode from shared preferences and returns a [Future] that
-  /// completes with the loaded theme mode.
+  /// Loads the old theme mode from shared preferences and returns a [Future]
+  /// that completes with the loaded theme mode.
   static Future<ThemeMode?> loadThemeMode() async {
-    final prefs = await SharedPreferences.getInstance();
-    final result = prefs.getString('THEME_MODE_GENIUS');
-
+    final result = await SharedPreferencesAsync().getString(
+      'THEME_MODE_GENIUS',
+    );
     return result != null ? _parseThemeMode(result) : null;
   }
 
